@@ -3,6 +3,9 @@ package ceri.clientmiddleware;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import Ice.InitializationData;
 
@@ -18,6 +21,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initIce();
         connect();
+
+        Button button = (Button) findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText editText = (EditText) findViewById(R.id.editText);
+                String mem = editText.getText().toString();
+                lecteurM.lireMorceauParfichier(mem);
+            }
+        });
     }
 
 

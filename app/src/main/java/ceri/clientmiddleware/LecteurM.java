@@ -26,7 +26,7 @@ public class LecteurM implements MediaPlayer.OnPreparedListener {
     private Activity memActivity = null;
     private Ice.Communicator communicator;
     private Activity mainActivity;
-    private Glacier2.RouterPrx glacier = null;
+    private Glacier2.RouterPrx brasier = null;
 
     public LecteurM(Ice.Communicator comm, final Activity mainAct){
         communicator = comm;
@@ -37,31 +37,55 @@ public class LecteurM implements MediaPlayer.OnPreparedListener {
 
 
     private void initRouter() {
+        System.out.print("initRooter\n");
+
         try {
+            System.out.print("try\n");
+
             Ice.RouterPrx defaultRouter = communicator.getDefaultRouter();
-            glacier = Glacier2.RouterPrxHelper.checkedCast(defaultRouter);
+            brasier = Glacier2.RouterPrxHelper.checkedCast(defaultRouter);
             try {
-                glacier.createSession("alarm", "alarm");
+                brasier.createSession("alarm", "alarm");
                 connecte = true;
             } catch (Exception e) {
+                System.out.print("sss\n");
+
                 Log.e("Glacier2Login", e.toString());
             }
         } catch (Exception e) {
+            System.out.print("qqq\n");
+
             Log.e("Glacier2", e.toString());
         }
     }
 
     private void initServer() {
-        if (!connecte)
+        System.out.print("kikooooo\n");
+
+        if (connecte)
             return;
         try {
+
             Ice.ObjectPrx base = communicator.stringToProxy("BiblAudio:tcp -h 192.168.1.38 -p 10000");
             //Ice.ObjectPrx base = communicator.stringToProxy("StreamMetaServer:tcp -h " + address + " -p " + port);
             serveur = ServeurIcePrxHelper.checkedCast(base);
             lance = true;
+            connecte = true;
+            System.out.print("connecté\n");
+
         } catch (Exception e) {
+            System.out.print("sdijbgdofui\n");
+
             Log.e("StreamMetaServer", e.toString());
         }
+    }
+
+    public void lireMorceauParfichier(String pathFic){
+        if(serveur == null){
+            System.out.print("serveur non detecte\n");
+            return;
+        }
+        serveur.readSoundFic(pathFic);
     }
 
 
