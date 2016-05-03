@@ -27,12 +27,16 @@ public class LecteurM implements MediaPlayer.OnPreparedListener {
     private Ice.Communicator communicator;
     private Activity mainActivity;
     private Glacier2.RouterPrx brasier = null;
+    private String host;
 
     public LecteurM(Ice.Communicator comm, final Activity mainAct){
         communicator = comm;
         mainActivity = mainAct;
         initRouter();
         initServer();
+
+
+
     }
 
 
@@ -44,6 +48,13 @@ public class LecteurM implements MediaPlayer.OnPreparedListener {
 
             Ice.RouterPrx defaultRouter = communicator.getDefaultRouter();
             brasier = Glacier2.RouterPrxHelper.checkedCast(defaultRouter);
+
+        } catch (Exception e) {
+            System.out.print("qqq\n");
+            Log.e("Glacier2", e.toString());
+        }
+
+
             try {
                 brasier.createSession("alarm", "alarm");
                 connecte = true;
@@ -52,31 +63,30 @@ public class LecteurM implements MediaPlayer.OnPreparedListener {
 
                 Log.e("Glacier2Login", e.toString());
             }
-        } catch (Exception e) {
-            System.out.print("qqq\n");
 
-            Log.e("Glacier2", e.toString());
-        }
+
     }
 
     private void initServer() {
-        System.out.print("kikooooo\n");
-
         if (connecte)
             return;
         try {
+            host = "192.168.1.38";
+            String s = "BiblAudio:tcp -h " + host + " -p 10000:ssl -h " + host + " -p 10001:udp -h " + host  + " -p 10000";
+            Ice.ObjectPrx prx = communicator.stringToProxy(s);
+            //prx = _mode.apply(prx);
 
-            Ice.ObjectPrx base = communicator.stringToProxy("BiblAudio:tcp -h 192.168.1.38 -p 10000");
+
+            //Ice.ObjectPrx base = communicator.stringToProxy("BiblAudio:tcp -h 192.168.1.38 -p 10000");
+            Ice.ObjectPrx base = communicator.stringToProxy(s);
             //Ice.ObjectPrx base = communicator.stringToProxy("StreamMetaServer:tcp -h " + address + " -p " + port);
-            serveur = ServeurIcePrxHelper.checkedCast(base);
+            serveur = ServeurIcePrxHelper.uncheckedCast(base);
             lance = true;
             connecte = true;
             System.out.print("connecté\n");
 
         } catch (Exception e) {
-            System.out.print("sdijbgdofui\n");
-
-            Log.e("StreamMetaServer", e.toString());
+            Log.e("serveur", e.toString());
         }
     }
 

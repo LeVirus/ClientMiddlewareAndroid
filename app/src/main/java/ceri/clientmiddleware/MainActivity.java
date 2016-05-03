@@ -1,5 +1,6 @@
 package ceri.clientmiddleware;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         connect();
 
         Button button = (Button) findViewById(R.id.button);
+        Button button2 = (Button) findViewById(R.id.button2);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
                 lecteurM.lireMorceauParfichier(mem);
             }
         });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RecoVocalee.class);
+                startActivity(intent);
+            }
+        });
+
+
     }
 
 
@@ -41,20 +53,23 @@ public class MainActivity extends AppCompatActivity {
         initData.properties = Ice.Util.createProperties();
         //String address = "127.0.0.1";
         String address = "192.168.1.38";//rasberry
-        initData.properties.setProperty("Ice.Default.Router", "Glacier2/router:tcp -h " + address + " -p 10000");
+        initData.properties.setProperty("Ice.Default.Router", "Glacier2/router:tcp -h " + address + " -p 4063");
         initData.properties.setProperty("Ice.ACM.Client", "0");
         initData.properties.setProperty("Ice.RetryIntervals", "-1");
-        initData.properties.setProperty("CallbackAdapter.Router", "Glacier2/router:tcp -h " + address + " -p 10000");
+        initData.properties.setProperty("CallbackAdapter.Router", "Glacier2/router:tcp -h " + address + " -p 4063");
         communicator = Ice.Util.initialize(initData);
     } catch (Exception e) {
         Log.e("Ice", e.toString());
     }
+
+
     }
 
     private void connect() {
-        if (lecteurM == null /*|| lecteurM.isNotWorking()*/)
+        if (lecteurM == null )
             lecteurM = new LecteurM(communicator, this);
         //lecteurM.run(communicator, this);
        // recorder = new BuiltinAudioRecorder(this);
+
     }
 }
