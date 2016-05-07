@@ -16,12 +16,12 @@
         android:lines="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/etSearchHint"/>
+        android:text=""/>
 
     <Button
         android:id="@+id/btSpeak"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
         android:onClick="speak"
         android:text="@string/btSpeak"
         tools:context=".VoiceRecognitionActivity" />

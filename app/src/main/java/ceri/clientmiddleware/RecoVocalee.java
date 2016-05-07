@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RecoVocalee extends Activity {
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1001;
-
+    InterpretVocal interVoc;
     private EditText metTextHint;
     private ListView mlvTextMatches;
     private Spinner msTextMatches;
@@ -29,6 +29,9 @@ public class RecoVocalee extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        interVoc = new InterpretVocal();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reco_vocalee);
         metTextHint = (EditText) findViewById(R.id.etTextHint);
@@ -62,6 +65,8 @@ public class RecoVocalee extends Activity {
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, metTextHint.getText()
                 .toString());
 
+
+
         // Given an hint to the recognizer about what the user is going to say
         //There are two form of language model available
         //1.LANGUAGE_MODEL_WEB_SEARCH : For short phrases
@@ -78,6 +83,7 @@ public class RecoVocalee extends Activity {
 
         int noOfMatches = Integer.parseInt(msTextMatches.getSelectedItem()
                 .toString());
+
         // Specify how many results you want to receive. The results will be
         // sorted where the first result is the one with higher confidence.
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, noOfMatches);
@@ -94,6 +100,12 @@ public class RecoVocalee extends Activity {
 
                 ArrayList<String> textMatchList = data
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                interpretRequete(textMatchList);
+
+                interVoc.setRequest(textMatchList);
+                if( interVoc.launchInterpret() )System.out.println("deus");
+                else System.out.println("pas deus");
 
                 if (!textMatchList.isEmpty()) {
                     // If first Match contains the 'search' word
@@ -126,8 +138,14 @@ public class RecoVocalee extends Activity {
             }else if(resultCode == RecognizerIntent.RESULT_SERVER_ERROR){
                 showToastMessage("Server Error");
             }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    void interpretRequete(ArrayList<String> textMatchList){
+
+    }
+
     /**
      * Helper method to show the toast message
      **/
