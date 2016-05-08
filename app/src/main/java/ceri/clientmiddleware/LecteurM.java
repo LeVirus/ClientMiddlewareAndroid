@@ -50,7 +50,6 @@ public class LecteurM implements MediaPlayer.OnPreparedListener {
             brasier = Glacier2.RouterPrxHelper.checkedCast(defaultRouter);
 
         } catch (Exception e) {
-            System.out.print("qqq\n");
             Log.e("Glacier2", e.toString());
         }
 
@@ -59,8 +58,6 @@ public class LecteurM implements MediaPlayer.OnPreparedListener {
                 brasier.createSession("alarm", "alarm");
                 connecte = true;
             } catch (Exception e) {
-                System.out.print("sss\n");
-
                 Log.e("Glacier2Login", e.toString());
             }
 
