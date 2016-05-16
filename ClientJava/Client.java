@@ -6,6 +6,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import biblAudio.Morceau;
+import java.util.ArrayList;
+
 
 class MonitorI extends biblAudio._MonitorDisp {
 	@Override
@@ -18,7 +21,7 @@ public class Client extends HttpServlet{
 
 	String action, music, nomArtiste;
 	String requestt = null;
-
+	ArrayList<Morceau> arrMorc;
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response)
 		throws ServletException, IOException {
@@ -29,6 +32,7 @@ public class Client extends HttpServlet{
 
 			if(granted)sendIce();
 
+			else System.out.println("requete FAUSSE");
 
 		}
 
@@ -73,7 +77,7 @@ public class Client extends HttpServlet{
 
 	void checkAction(){
 
-		String[] mots = requestt.get(0).split(" ");
+		String[] mots = requestt.split(" ");
 
 		for(String s :mots){
 			System.out.println( s +"    requ");
@@ -112,7 +116,7 @@ public class Client extends HttpServlet{
 		IceStorm.TopicPrx topic = null;
 		Ice.ObjectPrx proxy = null;
 		try {
-String[] s;
+			String[] s=new String[0];
 			ic = Ice.Util.initialize(s);
 			Ice.ObjectPrx base = ic.stringToProxy("BiblAudio:default -p 10000");//local
 			//Ice.ObjectPrx base = ic.stringToProxy("BiblAudio:tcp -h 192.168.1.43 -p 10000");//rasberry
@@ -125,7 +129,7 @@ String[] s;
 
 
 
-			serverIce.afficherMorceaux();
+	//		serverIce.afficherMorceaux();
 
 			//serverIce.bAjoutMorceau(na,  nm,  cf,  d ,  ds);
 			//					monitor.report(m);
@@ -136,16 +140,16 @@ String[] s;
 			//biblAudio.Morceau[] vectt = serverIce.getMorceauxMorc( nab );
 
 			//serverIce.readSoundFic(nac);
-String test="music/fez.mp3";
+			String test="music/fez.mp3";
 			serverIce.readSoundFic(test);
 
 			//serverIce.readSound(nmt,nmy);
 
-			serverIce.stopSound();
+	//		serverIce.stopSound();
 
 
 
-			ic.waitForShutdown();
+	//		ic.waitForShutdown();
 
 
 		} catch (Ice.LocalException e) {
@@ -166,6 +170,5 @@ String test="music/fez.mp3";
 			}
 		}
 		System.exit(status);
-		topic.unsubscribe(proxy);
 	}
 }
